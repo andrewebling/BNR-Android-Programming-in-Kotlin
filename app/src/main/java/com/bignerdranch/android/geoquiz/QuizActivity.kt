@@ -44,18 +44,22 @@ class QuizActivity : AppCompatActivity() {
         mQuestionTextView.setOnClickListener {
             progressQuestion(true)
         }
-        updateQuestion()
+
 
         mTrueButton = findViewById<Button>(R.id.true_button)
         mTrueButton.setOnClickListener {
 
-                checkAnswer(true)
+            checkAnswer(true)
+            mQuestionBank[mCurrentQuestionIndex].answered = true
+            updateQuestion()
         }
 
         mFalseButton = findViewById<Button>(R.id.false_button)
         mFalseButton.setOnClickListener {
 
             checkAnswer(false)
+            mQuestionBank[mCurrentQuestionIndex].answered = true
+            updateQuestion()
         }
 
         mPrevButton = findViewById<ImageButton>(R.id.prev_button)
@@ -68,6 +72,8 @@ class QuizActivity : AppCompatActivity() {
 
             progressQuestion(true)
         }
+
+        updateQuestion()
     }
 
     override fun onDestroy() {
@@ -121,6 +127,10 @@ class QuizActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionId = mQuestionBank[mCurrentQuestionIndex].mTextResId
         mQuestionTextView.setText(questionId)
+
+        val answered = mQuestionBank[mCurrentQuestionIndex].answered
+        mFalseButton.isEnabled = !answered
+        mTrueButton.isEnabled = !answered
     }
 
     private fun checkAnswer(userPressedTrue: Boolean) {
