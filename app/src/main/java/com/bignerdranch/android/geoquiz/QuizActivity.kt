@@ -4,15 +4,16 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var mTrueButton: Button
-    private lateinit var mPrevButton: Button
+    private lateinit var mPrevButton: ImageButton
     private lateinit var mFalseButton: Button
-    private lateinit var mNextButton: Button
+    private lateinit var mNextButton: ImageButton
     private lateinit var mQuestionTextView: TextView
 
     private val mQuestionBank = arrayOf(
@@ -47,12 +48,12 @@ class QuizActivity : AppCompatActivity() {
             checkAnswer(false)
         }
 
-        mPrevButton = findViewById<Button>(R.id.prev_button)
+        mPrevButton = findViewById<ImageButton>(R.id.prev_button)
         mPrevButton.setOnClickListener {
             progressQuestion(false)
         }
 
-        mNextButton = findViewById<Button>(R.id.next_button)
+        mNextButton = findViewById<ImageButton>(R.id.next_button)
         mNextButton.setOnClickListener {
 
             progressQuestion(true)
