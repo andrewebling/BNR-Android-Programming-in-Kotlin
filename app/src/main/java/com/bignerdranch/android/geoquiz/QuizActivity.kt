@@ -29,6 +29,7 @@ class QuizActivity : AppCompatActivity() {
             Question(R.string.question_africa, false),
             Question(R.string.question_asia, true))
     private var mCurrentQuestionIndex = 0
+    private var mCorrectAnswers = 0
 
 
 
@@ -139,9 +140,24 @@ class QuizActivity : AppCompatActivity() {
 
         if (userPressedTrue == answerTrue) {
             messageResId = R.string.correct_toast
+            mCorrectAnswers = mCorrectAnswers + 1
         } else {
             messageResId = R.string.incorrect_toast
         }
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+
+        if(allQuestionsAnswered()) {
+            val msg = getString(R.string.quiz_complete) + " " + "%.2f".format(score()) + "%"
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun allQuestionsAnswered(): Boolean {
+        return mQuestionBank.filter { !(it.answered) }.size == 1
+    }
+
+    private fun score():Float {
+        return (mCorrectAnswers / mQuestionBank.size.toFloat()) * 100
     }
 }
