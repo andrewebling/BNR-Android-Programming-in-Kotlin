@@ -17,6 +17,7 @@ class QuizActivity : AppCompatActivity() {
     companion object {
         const val TAG = "QuizActivity"
         const val KEY_INDEX = "index"
+        const val KEY_USER_IS_CHEATER = "cheater"
         const val REQUEST_CODE_CHEAT = 0
     }
 
@@ -42,6 +43,7 @@ class QuizActivity : AppCompatActivity() {
 
         if(savedInstanceState != null) {
             mCurrentQuestionIndex = savedInstanceState.getInt(KEY_INDEX, 0)
+            mIsCheater = savedInstanceState.getBoolean(KEY_USER_IS_CHEATER, false)
         }
 
         mQuestionTextView = findViewById<TextView>(R.id.question_text_view)
@@ -110,6 +112,7 @@ class QuizActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         Log.i(TAG, "onSaveInstanceState")
         outState?.putInt(KEY_INDEX, mCurrentQuestionIndex)
+        outState?.putBoolean(KEY_USER_IS_CHEATER, mIsCheater)
     }
 
     private var mIsCheater: Boolean = false
@@ -129,6 +132,7 @@ class QuizActivity : AppCompatActivity() {
 
     private fun progressQuestion(forward: Boolean) {
 
+        mQuestionBank[mCurrentQuestionIndex].mUserCheatedOnThisQuestion = mIsCheater
         val increment: Int
 
         if(forward) {
@@ -141,7 +145,7 @@ class QuizActivity : AppCompatActivity() {
             }
         }
         mCurrentQuestionIndex = (mCurrentQuestionIndex + increment) % mQuestionBank.size
-        mIsCheater = false
+        mIsCheater = mQuestionBank[mCurrentQuestionIndex].mUserCheatedOnThisQuestion
         updateQuestion()
     }
 
