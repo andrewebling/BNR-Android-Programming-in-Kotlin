@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
+import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ class QuizActivity : AppCompatActivity() {
     companion object {
         const val TAG = "QuizActivity"
         const val KEY_INDEX = "index"
+        const val REQUEST_CODE_CHEAT = 0
     }
 
     private lateinit var mTrueButton: Button
@@ -75,7 +77,7 @@ class QuizActivity : AppCompatActivity() {
         cheatButton.setOnClickListener {
             val answerIsTrue = mQuestionBank[mCurrentQuestionIndex].mAnswerTrue
             val intent = CheatActivity.newIntent(this, answerIsTrue)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
     }
 
@@ -108,6 +110,21 @@ class QuizActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         Log.i(TAG, "onSaveInstanceState")
         outState?.putInt(KEY_INDEX, mCurrentQuestionIndex)
+    }
+
+    private var mIsCheater: Boolean = false
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        if(requestCode == REQUEST_CODE_CHEAT) {
+            if(data == null) {
+                return
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data)
+        }
     }
 
     private fun progressQuestion(forward: Boolean) {
