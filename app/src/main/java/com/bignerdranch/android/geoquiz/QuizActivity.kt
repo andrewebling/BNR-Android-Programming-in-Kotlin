@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_quiz.*
 
 class QuizActivity : AppCompatActivity() {
 
@@ -67,6 +69,13 @@ class QuizActivity : AppCompatActivity() {
         mNextButton.setOnClickListener {
 
             progressQuestion(true)
+        }
+
+        // cheatButton pulled in via anko, direct from layout XML
+        cheatButton.setOnClickListener {
+            val answerIsTrue = mQuestionBank[mCurrentQuestionIndex].mAnswerTrue
+            val intent = CheatActivity.newIntent(this, answerIsTrue)
+            startActivity(intent)
         }
     }
 
